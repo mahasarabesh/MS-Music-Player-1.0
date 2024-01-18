@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="10sp"
+        app:strokeColor="@color/black"
+        android:outlineSpotShadowColor="@color/black"
+        app:cardBackgroundColor="@color/black"
+        android:layout_marginBottom="10sp"
+        app:cardCornerRadius="5sp">
+        <com.google.android.material.card.MaterialCardView
+
+            android:id="@+id/QueueSongCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5sp"
+            android:background="@color/dark_green"
+            android:layout_marginTop="2sp"
+            android:layout_marginBottom="2sp"
+            android:layout_marginRight="2sp"
+            android:layout_marginLeft="2sp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/Queueconstraintlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_green"
+                android:contentDescription=""
+                android:onClick="play">
+
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/Queue_check_box"
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:paddingEnd="5sp"
+                    android:contentDescription="Songposter"
+                    android:src="@android:drawable/ic_media_play"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="play"/>
+
+                <TextView
+                    android:id="@+id/Queue_song_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40sp"
+                    android:layout_marginEnd="40sp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/Queue_check_box"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="play"/>
+
+                <TextView
+                    android:id="@+id/Queue_Length"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8sp"
+                    android:gravity="bottom"
+                    android:paddingBottom="4sp"
+                    android:text="0:00"
+                    android:layout_marginLeft="10sp"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toStartOf="@+id/Queue_song_title"
+                    app:layout_constraintTop_toBottomOf="@+id/Queue_song_title"
+                    android:onClick="play"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+</RelativeLayout>

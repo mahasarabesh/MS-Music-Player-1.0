@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="lengthOptions">
+        <item>min</item>
+        <item>sec</item>
+    </array>
+    <array name="SleepOptions">
+        <item>hrs</item>
+        <item>min</item>
+    </array>
+</resources>

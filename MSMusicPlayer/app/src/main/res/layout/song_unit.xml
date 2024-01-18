@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="10sp"
+        app:strokeColor="@color/black"
+        android:outlineSpotShadowColor="@color/black"
+        app:cardBackgroundColor="@color/black"
+        android:layout_marginBottom="10sp"
+        app:cardCornerRadius="5sp">
+        <com.google.android.material.card.MaterialCardView
+
+            android:id="@+id/SongCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5sp"
+            android:background="@color/dark_green"
+            android:layout_marginTop="2sp"
+            android:layout_marginBottom="2sp"
+            android:layout_marginRight="2sp"
+            android:layout_marginLeft="2sp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_green"
+                android:contentDescription=""
+                android:onClick="play">
+
+
+                <ImageView
+                    android:id="@+id/song_poster"
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:paddingEnd="5sp"
+                    android:contentDescription="Songposter"
+                    android:src="@android:drawable/ic_media_play"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="play"/>
+
+                <TextView
+                    android:id="@+id/song_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40sp"
+                    android:layout_marginEnd="40sp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/song_poster"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="play"/>
+
+                <TextView
+                    android:id="@+id/Length"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8sp"
+                    android:gravity="bottom"
+                    android:paddingBottom="4sp"
+                    android:text="0:00"
+                    android:layout_marginLeft="10sp"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toStartOf="@+id/song_title"
+                    app:layout_constraintTop_toBottomOf="@+id/song_title"
+                    android:onClick="play"/>
+
+                <ImageButton
+                    android:id="@+id/song_three_dot"
+                    android:layout_width="40sp"
+                    android:layout_height="60sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginRight="15sp"
+                    app:srcCompat="@drawable/car_ui_icon_overflow_menu"
+                    android:background="@color/dark_green"
+                    android:onClick="optionsButton"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+</RelativeLayout>
