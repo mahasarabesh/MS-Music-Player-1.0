@@ -1,9 +1,6 @@
 package com.example.msmusicplayer;
 
 import android.graphics.Bitmap;
-
-import java.util.ArrayList;
-
 public class AudioFileDetails {
     public final long id;
     public final String title;

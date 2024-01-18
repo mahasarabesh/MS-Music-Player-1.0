@@ -1,25 +1,13 @@
 package com.example.msmusicplayer;
-
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.SystemClock;
-import android.widget.TextView;
-
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.util.Clock;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EventListener;
-import java.util.Iterator;
-import java.util.Queue;
-
 public class PlayingSong {
-    TextView songTitle;
-    TextView songLength;
     int pos,qpos;
     private final Context context;
     public static ExoPlayer exoPlayer;

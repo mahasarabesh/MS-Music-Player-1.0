@@ -4,16 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.Toast;
-
-import com.google.android.material.materialswitch.MaterialSwitch;
 
 public class Settings extends AppCompatActivity {
 

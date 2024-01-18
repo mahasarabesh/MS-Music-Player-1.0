@@ -5,14 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.card.MaterialCardView;
-
 import java.util.ArrayList;
-
 public class SongAdapterSearch extends RecyclerView.Adapter<SongAdapterSearch.ViewHolder>
 {
     ArrayList<AudioFileDetails> SongDetails=new ArrayList<>();

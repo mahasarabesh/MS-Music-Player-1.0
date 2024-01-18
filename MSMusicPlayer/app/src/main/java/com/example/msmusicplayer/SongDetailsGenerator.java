@@ -1,26 +1,18 @@
 package com.example.msmusicplayer;
 
 import android.content.ContentResolver;
-
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.provider.MediaStore;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
-
-
 import java.io.File;
-
 import java.util.ArrayList;
-
 public class SongDetailsGenerator extends AsyncTask<Void,Void,ArrayList<AudioFileDetails>> {
     public static ArrayList<String> mp3Formats;
     private static Context Con;
