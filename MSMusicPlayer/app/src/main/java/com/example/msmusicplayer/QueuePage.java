@@ -30,21 +30,23 @@ public class QueuePage extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
     public static void setPlayingCardDetails(){
-        long CardLength=nowPlaying.duration;
-        String CardSongName= nowPlaying.title;
-        int sec= Integer.parseInt(String.valueOf((CardLength-(CardLength%1000))/1000));
-        int min=(sec-(sec%60))/60;
-        sec=sec%60;
-        if(CardSongName.length()>30){
-            QueuePage.SongName.setText(CardSongName.substring(0,30).concat("..."));
-        }else {
-            QueuePage.SongName.setText(CardSongName);
-        }
-        String str=String.valueOf(min);
-        str+=":";str+=sec;
-        QueuePage.SongLength.setText(str);
-        if(nowPlaying.albumArt!=null){
-            QueuePage.SongPoster.setImageBitmap(nowPlaying.albumArt);
+        if (nowPlaying!=null){
+            long CardLength=nowPlaying.duration;
+            String CardSongName= nowPlaying.title;
+            int sec= Integer.parseInt(String.valueOf((CardLength-(CardLength%1000))/1000));
+            int min=(sec-(sec%60))/60;
+            sec=sec%60;
+            if(CardSongName.length()>30){
+                QueuePage.SongName.setText(CardSongName.substring(0,30).concat("..."));
+            }else {
+                QueuePage.SongName.setText(CardSongName);
+            }
+            String str=String.valueOf(min);
+            str+=":";str+=sec;
+            QueuePage.SongLength.setText(str);
+            if(nowPlaying.albumArt!=null){
+                QueuePage.SongPoster.setImageBitmap(nowPlaying.albumArt);
+            }
         }
     }
 

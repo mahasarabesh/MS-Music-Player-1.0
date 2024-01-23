@@ -77,7 +77,8 @@ public class SongDetailsGenerator extends AsyncTask<Void,Void,ArrayList<AudioFil
                 MediaStore.Audio.Media.ARTIST,
                 MediaStore.Audio.Media.ALBUM,
                 MediaStore.Audio.Media.DURATION,
-                MediaStore.Audio.Media.DATA
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.BITRATE
         };
 
         ContentResolver contentResolver = Con.getContentResolver();
@@ -99,7 +100,8 @@ public class SongDetailsGenerator extends AsyncTask<Void,Void,ArrayList<AudioFil
                             String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
                             long duration = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
                             retriever.setDataSource(filePath);
-                            AudioFileDetails audioFile = new AudioFileDetails(id, title, artist, album, duration, filePath);
+                            String bitrate=cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.BITRATE));
+                            AudioFileDetails audioFile = new AudioFileDetails(id, title, artist, album, duration, filePath,bitrate);
                             if(retriever.getEmbeddedPicture()!=null){
                                 bitmap= BitmapFactory.decodeByteArray(retriever.getEmbeddedPicture(),0,retriever.getEmbeddedPicture().length);
                                 audioFile.albumArt=bitmap;

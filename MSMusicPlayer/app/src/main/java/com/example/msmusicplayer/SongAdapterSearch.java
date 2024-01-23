@@ -20,7 +20,7 @@ public class SongAdapterSearch extends RecyclerView.Adapter<SongAdapterSearch.Vi
         SongDetails.clear();
 
         for (int i = 0; i < MainActivity.SongDetails.size(); i++) {
-            if (MainActivity.SongDetails.get(i).title.contains(query)) {
+            if (MainActivity.SongDetails.get(i).title.toLowerCase().contains(query.toLowerCase())) {
                 SongDetails.add(MainActivity.SongDetails.get(i));
             }
         }

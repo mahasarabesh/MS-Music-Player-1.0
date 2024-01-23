@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 public class PlayingSong {
-    int pos,qpos;
+    public static int pos,qpos;
     private final Context context;
     public static ExoPlayer exoPlayer;
     public static int size;
@@ -58,6 +58,7 @@ public class PlayingSong {
             exoPlayer.play();
             MainActivity.setPlayingCardDetails(PlayingSong.Queue.get(qpos));
             QueuePage.setNowPlaying(PlayingSong.Queue.get(qpos));
+            pos=qpos;
             qpos++;
         }
     }
@@ -71,6 +72,7 @@ public class PlayingSong {
             exoPlayer.play();
             MainActivity.setPlayingCardDetails(PlayingSong.Queue.get(qpos));
             QueuePage.setNowPlaying(PlayingSong.Queue.get(pos));
+            pos=qpos;
             qpos++;
         }
     }

@@ -3,26 +3,29 @@ package com.example.msmusicplayer;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Handler;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private Context context;
-
     public static RecyclerView songsList;
     public static PlayingSong playingSong;
     public static PreferenceValues preferenceValues;
@@ -32,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     public static ImageView SongPoster;
     public static ImageView PlayButton;
+    public static ImageView Playing_poster;
+    public static Dialog PlayingScreen;
+    public static SeekBar PlayingSlider;
     public static SongDetailsGenerator songDetailsGenerator;
+    private static TextView title,album,artist,duration,bitrate,path;
 
     public static ArrayList<AudioFileDetails> SongDetails=new ArrayList<>();
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 if (CardSeekbar != null) {
                     MainActivity.CardSeekbar.setProgress((int) PlayingSong.exoPlayer.getCurrentPosition());
+                    if(PlayingSlider!=null){
+                        MainActivity.PlayingSlider.setProgress((int) PlayingSong.exoPlayer.getCurrentPosition());
+                    }
                 }
                 handler.postDelayed(this, 100);
             }
@@ -99,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.CardLength.setText(str);
         if(audioFileDetails.albumArt!=null){
             MainActivity.SongPoster.setImageBitmap(audioFileDetails.albumArt);
+
         }
     }
     public void searchButton(View view){
@@ -117,6 +128,24 @@ public class MainActivity extends AppCompatActivity {
             PlayButton.setImageResource(R.drawable.ic_pause_button);
         }
     }
+    public void openPlayingCard(View view){
+        PlayingScreen = new Dialog(this);
+        PlayingScreen.setContentView(R.layout.activity_playing_screen);
+        PlayingScreen.setCancelable(true);
+        PlayingScreen.show();
+        PlayingSlider = PlayingScreen.findViewById(R.id.playing_screen_seekbar);
+        AudioFileDetails audioFileDetails = MainActivity.SongDetails.get(PlayingSong.pos);
+        Playing_poster = PlayingScreen.findViewById(R.id.playing_screen_poster);
+        TextView title = PlayingScreen.findViewById(R.id.playing_screen_title);
+        if (PlayingSlider != null) {
+            PlayingSlider.setMax((int) audioFileDetails.duration);
+        }
+        title.setText(audioFileDetails.title);
+        if (audioFileDetails.albumArt != null) {
+            Playing_poster.setImageBitmap(audioFileDetails.albumArt);
+        }
+    }
+
     public static void getSongDetails(ArrayList<AudioFileDetails> arrayList){
         SongDetails=arrayList;
     }
@@ -137,7 +166,35 @@ public class MainActivity extends AppCompatActivity {
                     Snackbar.make(view,"Added to Queue",Snackbar.LENGTH_SHORT).show();
                     return true;
                 } else if (item.getItemId()==R.id.details) {
-                    System.out.println("details");
+                    int pos=Integer.parseInt(view.getContentDescription().toString());
+                    final Dialog detailsDialog=new Dialog(context);
+                    detailsDialog.setContentView(R.layout.details_card);
+                    detailsDialog.setCancelable(true);
+                    detailsDialog.show();
+                    System.out.println("pos:"+pos);
+                    AudioFileDetails audioFileDetails=MainActivity.SongDetails.get(pos);
+                    title=detailsDialog.findViewById(R.id.Detail_title);
+                    System.out.println(title.getText());
+                    title.setText(audioFileDetails.title);
+                    album=detailsDialog.findViewById(R.id.Detail_album);
+                    album.setText(audioFileDetails.album);
+                    artist=detailsDialog.findViewById(R.id.Detail_artist);
+                    artist.setText(audioFileDetails.artist);
+                    bitrate=detailsDialog.findViewById(R.id.Detail_bitrate);
+                    bitrate.setText(audioFileDetails.bitrate);
+                    duration=detailsDialog.findViewById(R.id.Detail_duration);
+                    long CardLength=audioFileDetails.duration;
+                    int sec= Integer.parseInt(String.valueOf((CardLength-(CardLength%1000))/1000));
+                    int min=(sec-(sec%60))/60;
+                    sec=sec%60;
+                    String durationtxt=min+":"+sec;
+                    duration.setText(durationtxt);
+                    path=detailsDialog.findViewById(R.id.Detail_path);
+                    path.setText(audioFileDetails.filePath);
+                    WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+                    Display display = windowManager.getDefaultDisplay();
+                    System.out.println(display.getWidth());
+                    path.setMaxWidth(display.getWidth()-400);
                     return true;
                 }
                 return false;
@@ -145,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
         });
         popupMenu.show();
     }
+
     public void play(View view){
         System.out.println(view.getContentDescription());
         playingSong.playThisSong(Integer.parseInt((String) view.getContentDescription()));
