@@ -1,6 +1,7 @@
 package com.example.msmusicplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
@@ -10,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,21 +27,19 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    int height,width;
+    private QueueGenerator queueGenerator;
     private Context context;
     public static RecyclerView songsList;
     public static PlayingSong playingSong;
     public static PreferenceValues preferenceValues;
-    static TextView CardSongName;
-    static TextView CardLength;
-    public static SeekBar CardSeekbar;
+    static TextView CardSongName,CardLength;
+    public static SeekBar CardSeekbar,PlayingSlider;
     private Handler handler;
-    public static ImageView SongPoster;
-    public static ImageView PlayButton;
-    public static ImageView Playing_poster;
-    public static Dialog PlayingScreen;
-    public static SeekBar PlayingSlider;
+    private Dialog PlayingScreen;
+    public static ImageView PlayButton,SongPoster,Playing_poster,PlayingShuffle,PlayingLoop,PlayingPlay;
     public static SongDetailsGenerator songDetailsGenerator;
-    private static TextView title,album,artist,duration,bitrate,path;
+    private static TextView title,album,artist,duration,bitrate,path,PlayingRuntime,Playinglength;
 
     public static ArrayList<AudioFileDetails> SongDetails=new ArrayList<>();
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         preferenceValues=new PreferenceValues(this);
         context=this;
+        queueGenerator=new QueueGenerator(false);
+        findmeasurements();
         CardSongName=findViewById(R.id.play_title);
         SongPoster=findViewById(R.id.playing_poster);
         CardLength=findViewById(R.id.play_length);
@@ -63,9 +65,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (CardSeekbar != null) {
+                    int len=(int) PlayingSong.exoPlayer.getCurrentPosition();
                     MainActivity.CardSeekbar.setProgress((int) PlayingSong.exoPlayer.getCurrentPosition());
                     if(PlayingSlider!=null){
-                        MainActivity.PlayingSlider.setProgress((int) PlayingSong.exoPlayer.getCurrentPosition());
+                        int sec= Integer.parseInt(String.valueOf((len-(len%1000))/1000));
+                        int min=(sec-(sec%60))/60;
+                        sec=sec%60;
+                        PlayingRuntime.setText(String.format("%d:%d", min, sec));
+                        MainActivity.PlayingSlider.setProgress(len);
+
                     }
                 }
                 handler.postDelayed(this, 100);
@@ -91,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    private void findmeasurements() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height=displayMetrics.heightPixels;
+        width=displayMetrics.widthPixels;
+    }
+
     public static void setPlayingCardDetails(AudioFileDetails audioFileDetails){
         long CardLength=audioFileDetails.duration;
         String CardSongName= audioFileDetails.title;
@@ -107,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
         String str=String.valueOf(min);
         str+=":";str+=sec;
         MainActivity.CardLength.setText(str);
+        if(Playinglength!=null){
+            Playinglength.setText(str);
+        }
         if(audioFileDetails.albumArt!=null){
             MainActivity.SongPoster.setImageBitmap(audioFileDetails.albumArt);
 
@@ -117,22 +136,58 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void playButton(View view){
-        if (PlayingSong.exoPlayer.isPlaying()){
-            PlayingSong.exoPlayer.pause();
-            PlayButton.setImageResource(R.drawable.ic_play_button);
-        }
-        else if(playingSong.pos==-1){
+        int resid = R.drawable.ic_play_button;
+        if (playingSong.pos==-1){
             playingSong.playThisSong(0);
+        }
+        else if(PlayingSong.exoPlayer.isPlaying()){
+            PlayingSong.exoPlayer.pause();
+            resid=R.drawable.ic_play_button;
+
         } else if (!PlayingSong.exoPlayer.isPlaying()) {
             PlayingSong.exoPlayer.play();
-            PlayButton.setImageResource(R.drawable.ic_pause_button);
+            resid=R.drawable.ic_pause_button;
+        }
+        PlayButton.setImageResource(resid);
+        if(PlayingPlay!=null){
+            PlayingPlay.setImageResource(resid);
         }
     }
     public void openPlayingCard(View view){
         PlayingScreen = new Dialog(this);
         PlayingScreen.setContentView(R.layout.activity_playing_screen);
         PlayingScreen.setCancelable(true);
+        View layout=PlayingScreen.findViewById(R.id.playing_screen_overall_layout);
         PlayingScreen.show();
+        PlayingLoop=PlayingScreen.findViewById(R.id.playing_screen_loop);
+        PlayingRuntime=PlayingScreen.findViewById(R.id.playing_screen_runtime_timestamp);
+        Playinglength=PlayingScreen.findViewById(R.id.playing_screen_timestamp);
+        PlayingShuffle=PlayingScreen.findViewById(R.id.playing_screen_shuffle);
+        PlayingPlay=PlayingScreen.findViewById(R.id.playing_screen_play_pause_button);
+        if(PlayingSong.exoPlayer.isPlaying()){
+            PlayingPlay.setImageResource(R.drawable.ic_pause_button);
+
+        } else if (!PlayingSong.exoPlayer.isPlaying()) {
+            PlayingPlay.setImageResource(R.drawable.ic_play_button);
+        }
+        PlayingPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playButton(PlayingPlay);
+            }
+        });
+        PlayingShuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlayingSong.queueGenerator.setShuffle();
+            }
+        });
+        PlayingLoop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlayingSong.queueGenerator.setLoop();
+            }
+        });
         PlayingSlider = PlayingScreen.findViewById(R.id.playing_screen_seekbar);
         AudioFileDetails audioFileDetails = MainActivity.SongDetails.get(PlayingSong.pos);
         Playing_poster = PlayingScreen.findViewById(R.id.playing_screen_poster);

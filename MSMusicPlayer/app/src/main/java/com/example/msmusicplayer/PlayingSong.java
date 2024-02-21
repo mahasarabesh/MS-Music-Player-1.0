@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 public class PlayingSong {
     public static int pos,qpos;
+    public static QueueGenerator queueGenerator;
     private final Context context;
     public static ExoPlayer exoPlayer;
     public static int size;
@@ -23,6 +24,7 @@ public class PlayingSong {
         qpos=0;
         this.context = context;
         exoPlayer= new ExoPlayer.Builder(context).build();
+        queueGenerator=new QueueGenerator(false);
         PlayingSong.Queue=new ArrayList<>();
     }
 
@@ -45,11 +47,10 @@ public class PlayingSong {
         exoPlayer.play();
         MainActivity.setPlayingCardDetails(MainActivity.SongDetails.get(pos));
         QueuePage.setNowPlaying(MainActivity.SongDetails.get(pos));
-        QueueGenerator queueGenerator=new QueueGenerator(true);
         queueGenerator.start();
     }
     public void playPrevious(){
-        if(qpos>=0) {
+        if(qpos>=0 && !PlayingSong.Queue.isEmpty()) {
             File audioFile = new File(PlayingSong.Queue.get(qpos).filePath);
             Uri audioUri = Uri.fromFile(audioFile);
             MediaItem songFile = MediaItem.fromUri(audioUri);
@@ -63,7 +64,7 @@ public class PlayingSong {
         }
     }
     public void Autoplay(){
-        if(qpos<PlayingSong.Queue.size()) {
+        if(qpos<PlayingSong.Queue.size() && !PlayingSong.Queue.isEmpty()) {
             File audioFile = new File(PlayingSong.Queue.get(qpos).filePath);
             Uri audioUri = Uri.fromFile(audioFile); 
             MediaItem songFile = MediaItem.fromUri(audioUri);
@@ -76,46 +77,62 @@ public class PlayingSong {
             qpos++;
         }
     }
-
-    public void pause() {
-
-        exoPlayer.pause();
-    }
-
-
 }
-class QueueGenerator extends Thread
-{
-    boolean shuffle;
+class QueueGenerator extends Thread {
+    public static boolean shuffle;
+    public static int loop;
+
     QueueGenerator(boolean shuffle){
-        this.shuffle=shuffle;
+    QueueGenerator.shuffle=shuffle;
+    loop=0;
     }
-    public void run(){
-        int j=0;
-        if(PlayingSong.Queue==null) {
-            System.out.println("Queue null");
+    public void setLoop() {
+        QueueGenerator.loop=(QueueGenerator.loop+1)%3;
+        switch(QueueGenerator.loop) {
+            case 0:
+                MainActivity.PlayingLoop.setImageResource(R.drawable.ic_launcher_foreground);
+                break;
+            case 1:
+                MainActivity.PlayingLoop.setImageResource(R.drawable.ic_music);
+                break;
+            case 2:
+                MainActivity.PlayingLoop.setImageResource(R.drawable.ic_kebab_option);
+                break;
         }
-        if(shuffle){
-            if(!PlayingSong.Queue.isEmpty()){
-                PlayingSong.Queue.removeAll(MainActivity.SongDetails);
+    }
+
+    public static void setShuffle() {
+        if (shuffle) {
+            shuffle = false;
+            MainActivity.PlayingShuffle.setImageResource(R.drawable.ic_launcher_foreground);
+        } else {
+            shuffle = true;
+            MainActivity.PlayingShuffle.setImageResource(R.drawable.ic_music);
+        }
+    }
+
+
+        public void run() {
+            if (PlayingSong.Queue == null) {
+                System.out.println("Queue null");
             }
-            PlayingSong.Queue.addAll(MainActivity.SongDetails);
-            Collections.shuffle(PlayingSong.Queue);
-            SystemClock.sleep(100);
-        }
-        else {
-            PlayingSong.Queue.removeAll(MainActivity.SongDetails);
-                int i=MainActivity.playingSong.pos;
-                while (i<MainActivity.SongDetails.size()){
+            if (shuffle) {
+                if (!PlayingSong.Queue.isEmpty()) {
+                    PlayingSong.Queue.removeAll(MainActivity.SongDetails);
+                }
+                PlayingSong.Queue.addAll(MainActivity.SongDetails);
+                Collections.shuffle(PlayingSong.Queue);
+                SystemClock.sleep(100);
+            } else {
+                PlayingSong.Queue.removeAll(MainActivity.SongDetails);
+                int i = PlayingSong.pos;
+                while (i < MainActivity.SongDetails.size()) {
                     PlayingSong.Queue.add(MainActivity.SongDetails.get(i));
                     i++;
                     SystemClock.sleep(100);
                 }
+            }
         }
-        /*while (j<PlayingSong.Queue.size()){
-            System.out.println(PlayingSong.Queue.get(j).title);
-            j++;
-            SystemClock.sleep(100);
-        }*/
     }
-}
+
+

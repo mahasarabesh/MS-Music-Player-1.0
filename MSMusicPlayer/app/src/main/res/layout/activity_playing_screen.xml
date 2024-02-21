@@ -5,45 +5,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/very_light_green"
-    tools:context=".PlayingScreen">
+    tools:context=".PlayingScreen"
+    android:id="@+id/playing_screen_overall_layout">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/imageView2"
         android:layout_width="310sp"
         android:layout_height="310sp"
-        android:layout_marginTop="200sp"
+        android:outlineSpotShadowColor="@color/black"
         app:cardCornerRadius="10sp"
+        app:cardElevation="100sp"
+        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:cardElevation="100sp"
-        android:outlineSpotShadowColor="@color/black"
         app:layout_constraintTop_toTopOf="parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/dark_green">
+
             <ImageView
                 android:id="@+id/playing_screen_poster"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_music"
                 android:layout_margin="5sp"
-                android:background="@color/very_light_green"/>
+                android:layout_marginBottom="50sp"
+                android:background="@color/very_light_green"
+                android:src="@drawable/ic_music" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <SeekBar
         android:id="@+id/playing_screen_seekbar"
-        android:layout_width="match_parent"
-        android:layout_height="20sp"
+        android:layout_width="400sp"
+        android:layout_height="11sp"
         android:layout_margin="10sp"
+        android:layout_marginTop="50sp"
         app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,8 +60,8 @@
 
     <ImageView
         android:id="@+id/playing_screen_play_pause_button"
-        android:layout_width="80sp"
-        android:layout_height="80sp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
         android:layout_marginStart="5sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
@@ -63,10 +71,10 @@
 
     <ImageView
         android:id="@+id/imageView6"
+        android:onClick="playNextButton"
         android:layout_width="80sp"
         android:layout_height="80sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:srcCompat="@android:drawable/ic_media_next" />
@@ -75,9 +83,9 @@
         android:id="@+id/imageView7"
         android:layout_width="80sp"
         android:layout_height="80sp"
+        android:onClick="playPreviousButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView4"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:srcCompat="@android:drawable/ic_media_previous" />
 
@@ -86,9 +94,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/playing_screen_shuffle"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <ImageView
+        android:id="@+id/playing_screen_loop"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/playing_screen_runtime_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="11sp"
+        android:text="TextView"
+        android:layout_marginStart="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/playing_screen_shuffle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <TextView
+        android:id="@+id/playing_screen_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginEnd="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/playing_screen_loop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.303" />
 </androidx.constraintlayout.widget.ConstraintLayout>

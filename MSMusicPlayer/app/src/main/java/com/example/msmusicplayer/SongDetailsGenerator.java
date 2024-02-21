@@ -17,6 +17,7 @@ public class SongDetailsGenerator extends AsyncTask<Void,Void,ArrayList<AudioFil
     public static ArrayList<String> mp3Formats;
     private static Context Con;
     public int sizeValue;
+    public static  int minLength;
     public RecyclerView songsList;
 
     public SongDetailsGenerator(Context context,RecyclerView songsList) {

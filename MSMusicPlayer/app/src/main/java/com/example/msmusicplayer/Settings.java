@@ -4,52 +4,40 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-public class Settings extends AppCompatActivity {
+import java.util.ArrayList;
 
-    SwitchCompat SizeSwitch;
-    EditText sizeVal;
+public class Settings extends AppCompatActivity {
+    public static EditText sizeVal;
+    public static Spinner LengthSpinner;
+    public static Spinner SleepSpinner;
+    public static EditText LengthInput;
+    public static EditText SleepInput;
+    public static ArrayList<CheckBox> AudioFormat;
     Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        SizeSwitch = findViewById(R.id.SizeSwitch);
         sizeVal = findViewById(R.id.SizeVal);
+        LengthInput=findViewById(R.id.LengthInput);
+        LengthSpinner=findViewById(R.id.LengthSpinner);
+        SleepSpinner=findViewById(R.id.SleepSpinner);
+        SleepInput=findViewById(R.id.SleepInput);
+        AudioFormat=new ArrayList<>();
+        AudioFormat.add(findViewById(R.id.mp3Checkbox));
+        AudioFormat.add(findViewById(R.id.flacCheckbox));
+        AudioFormat.add(findViewById(R.id.wavCheckbox));
+        AudioFormat.add(findViewById(R.id.oggCheckbox));
         context =this;
-        SizeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (!sizeVal.getText().toString().equals("")) {
-                        String str= sizeVal.getText().toString();
-                        if (Integer.parseInt(sizeVal.getText().toString())>0){
-                            MainActivity.songDetailsGenerator.sizeValue=Integer.parseInt(sizeVal.getText().toString());
-                            MainActivity.songDetailsGenerator.doInBackground();
-                        }
-                        else{
-                            Toast.makeText(context,"enter valid size",Toast.LENGTH_LONG).show();
-
-                        }
-                    }
-                    else {
-                        SizeSwitch.setChecked(false);
-                        Toast.makeText(context,"enter the size",Toast.LENGTH_LONG).show();
-                    }
-
-                }
-                else {
-                    MainActivity.songDetailsGenerator.sizeValue=0;
-                    MainActivity.songDetailsGenerator.doInBackground();
-                }
-            }
-
-        });
     }
 
 }
